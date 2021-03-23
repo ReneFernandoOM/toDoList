@@ -1,0 +1,23 @@
+{
+  "name": "todolist",
+  "version": "1.0.0",
+  "description": "todolist project",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ReneFernandoOM/toDoList.git"
+  },
+  "author": "Rene Fernando Ortega Munguia",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/ReneFernandoOM/toDoList/issues"
+  },
+  "homepage": "https://github.com/ReneFernandoOM/toDoList#readme",
+  "devDependencies": {
+    "webpack": "^5.27.2",
+    "webpack-cli": "^4.5.0"
+  }
+}
