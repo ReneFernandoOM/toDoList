@@ -35,7 +35,7 @@ body {
 
 .side-nav {
     box-sizing: border-box;
-    flex-basis: 25%;
+    flex-basis: 20%;
     background: #373737;
     height: 100%;
     display: flex;
@@ -46,10 +46,20 @@ body {
 }
 
 .main-container {
-    flex-basis: 75%;
+    box-sizing: border-box;
+    flex-basis: 80%;
     height: 100%;
     background: #373737be;
     z-index: -1;
+    padding: 1em 3em;
+    margin: 0px;
+    display: flex;
+    flex-direction: column;
+}
+
+.proj-title {
+    font-size: 24px;
+    margin-bottom: 0px;
 }
 
 .main-item {
@@ -85,12 +95,21 @@ body {
 
 .projects-list h4 {
     width: 100%;
+    margin-bottom: 0.25em;
+    padding-bottom: 0.5em;
+    font-style: italic;
+    border-bottom: 1px solid black;
+    font-size: 22px;
+}
+
+/* .projects-list ul {
+    width: 100%;
     margin-bottom: 0.5em;
     padding-bottom: 1em;
     font-style: italic;
     border-bottom: 1px solid black;
     font-size: 22px;
-}
+} */
 
 .lista-proyecto {
     width: 100%;
@@ -108,6 +127,11 @@ body {
 
 .lista-proyecto:hover {
     background: #535353;
+}
+
+.proj-list-item {
+    padding: 0.5em;
+    cursor: pointer;
 }
 
 /* MODAL */

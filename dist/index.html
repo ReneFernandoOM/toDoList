@@ -39,15 +39,17 @@
             </div>
             <div class="projects-list">
                 <h4>Proyectos</h4>
-                <ul>
-                    <li>proj # 1</li>
+                <ul id="projectsList">
+                    <li class="proj-list-item">proj # 1</li>
                 </ul>
-                <span class="lista-proyecto" id="addProject"><i data-feather="plus" class="side-nav-icons"></i> Añadir
+                <span class="lista-proyecto" id="addProjectMod"><i data-feather="plus" class="side-nav-icons"></i>
+                    Añadir
                     proyecto</span>
             </div>
         </div>
         <div class="main-container">
-
+            <h4 class="proj-title">Proyecto #1</h4>
+            <p class="proj-description">Descripción para el proyecto 1</p>
         </div>
     </div>
 
@@ -60,9 +62,9 @@
             </div>
             <div class="modal-content">
                 <label for="bookName">Nombre del proyecto</label>
-                <input type="text" id="bookName">
+                <input type="text" id="projName">
                 <div class="button-row">
-                    <button class="button choice-btn submit-btn" id="addBookBtn">Añadir libro</button>
+                    <button class="button choice-btn submit-btn" id="addProjBtn">Agregar proyecto</button>
                 </div>
             </div>
         </div>
