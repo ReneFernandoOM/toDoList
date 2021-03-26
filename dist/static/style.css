@@ -37,7 +37,7 @@ body {
     box-sizing: border-box;
     flex-basis: 20%;
     background: #373737;
-    height: 100%;
+    min-height: 100%;
     display: flex;
     flex-direction: column;
     justify-content: flex-start;
@@ -48,18 +48,127 @@ body {
 .main-container {
     box-sizing: border-box;
     flex-basis: 80%;
-    height: 100%;
+    min-height: 100%;
     background: #373737be;
-    z-index: -1;
     padding: 1em 3em;
     margin: 0px;
     display: flex;
     flex-direction: column;
+    overflow-y: scroll; 
 }
 
 .proj-title {
     font-size: 24px;
     margin-bottom: 0px;
+}
+
+.proj-info-container {
+    border-bottom: 3px solid rgb(247, 247, 237);
+}
+
+.todos-container {
+    display: flex;
+    flex-direction: column;
+    margin-top: 1em;
+}
+
+.todo-div {
+    padding: 1em 0;
+}
+
+.todo-main-info {
+    box-sizing: border-box;
+    height: 4em;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0px 1.5em;
+    border-radius: 1.25em;
+    background: #3636366e;
+    box-shadow: 0.5em 0.5em 0.5em rgb(0, 0, 0, 0.3);
+}
+
+
+.todo-left {
+    flex-basis: 60%;
+    display: flex;
+    align-items: center;
+}
+
+.todo-checked {
+    width: 30px;
+    height: 30px;
+    border-radius: 100%;
+    border: 2px solid rgba(212, 208, 208, 0.733);
+    margin-right: 2em;
+}
+
+.todo-checked:hover{
+    cursor: pointer;
+}
+
+.todo-checked.checked {
+    background-color: #4faa46;
+    background-image: url(images/checked.svg);
+    background-size: 65%;
+    background-position: 50% 50%;
+    background-repeat: no-repeat;
+}
+
+.todo-right span {
+    padding: 0em 0.5em;
+    transition: color 0.2s ease-in;
+    cursor: pointer;
+}
+
+#todoEdit:hover {
+    color: rgb(174, 199, 253);
+}
+
+#todoRemove:hover {
+    color: rgb(253, 150, 150);
+}
+
+.todo-info:hover {
+    color: rgb(165, 252, 165);
+}
+
+.todo-container {
+    max-height: 0em;
+    overflow: hidden;
+    transition: max-height 0.5s linear;
+
+  }
+
+.todo-content {
+    margin: 2em 20em;
+    background: #3636366e;
+    height: 10em;
+    border-radius: 1em;
+    padding: 2em;
+    display: flex;
+    justify-content: center;
+    /* align-items: center; */
+}
+
+.todo-descrip {
+    flex-basis: 55%;
+    padding-right: 1.5em;
+    border-right: 1px solid whitesmoke;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    line-height: 1.75em;
+}
+
+.todo-all-info {
+    flex-basis: 40%;
+    padding-left: 1.5em;
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    flex-direction: column;
 }
 
 .main-item {

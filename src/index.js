@@ -47,6 +47,40 @@ const modalListeners = (() => {
     })()
 })()
 
+const mainContainerListeners = (() => {
+    const checkedDivs = document.querySelectorAll('.todo-checked');
+    const toDoInfos = document.querySelectorAll('.todo-info');
+
+    const addListeners = () => {
+        checkedDivs.forEach(checkedDiv => {
+            checkedDiv.addEventListener('click', () => {
+                if (checkedDiv.classList.contains('checked')) {
+                    checkedDiv.classList.remove('checked');
+                } else {
+                    checkedDiv.classList.add('checked')
+                }
+            })
+        });
+
+        toDoInfos.forEach(toDoInfo => {
+            toDoInfo.addEventListener('click', () => {
+                let toDoContainer = document.querySelector(`#todo-${toDoInfo.id}`);
+                if (toDoContainer.style.maxHeight) {
+                    console.log('w');
+                    toDoContainer.style.maxHeight = null;
+                    console.log('r')
+                } else {
+                    toDoContainer.style.maxHeight = '40em';
+                }
+            })
+        });
+    }
+
+    const _init = (() => {
+        addListeners();
+    })()
+})()
+
 const domManipulation = (() => {
     const projectsList = document.querySelector('#projectsList');
 
