@@ -64,6 +64,32 @@ body {
 
 .proj-info-container {
     border-bottom: 3px solid rgb(247, 247, 237);
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+}
+
+.add-btn-container {
+    padding: 2em;
+}
+
+.button {
+    padding: 1em;
+    color: beige;
+    border-radius: 0.5em;
+    outline: none;
+    font-size: 0.85em;
+}
+
+.add-btn {
+    background: #3636366e;
+    padding: 1em 3em;
+    border: none;
+    box-shadow: 0.35em 0.35em 0.35em rgb(0, 0, 0, 0.3);
+}
+
+.add-btn:hover {
+    cursor: pointer;
 }
 
 .todos-container {
@@ -243,6 +269,30 @@ body {
     cursor: pointer;
 }
 
+.button-row {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 1em;
+}
+
+.submit-btn {
+    padding: 1em;
+    background: #2d972d;
+    color: beige;
+    border-radius: 0.5em;
+    outline: none;
+    font-size: 0.85em;
+}
+
+.submit-btn:hover {
+    cursor: pointer;
+}
+
+#projDesc {
+    /* height: 7.5em; */
+}
+
 /* MODAL */
 .modal-bg {
     position: fixed;
@@ -300,10 +350,44 @@ body {
     flex-direction: column;
 }
 
-.modal-content input {
+.py-0 {
+    padding-top: 0px;
+    padding-bottom: 0px;
+}
+
+.pb-0 {
+    padding-bottom: 0px !important;
+}
+
+.modal-content-container {
+    display: flex;
+    padding: 20px;
+}
+
+
+.modal-content input, textarea {
     margin: 10px;
     padding: 5px;
     color: beige;
     background: rgb(40, 43, 44); 
     outline: none;
+}
+
+.modal-task-info {
+    display: flex;
+    justify-content: flex-start;
+    align-items: flex-start;
+    flex-direction: column;
+}
+
+.modal-task-info input, select {
+    margin: 10px;
+    padding: 5px;
+    background: rgb(40, 43, 44); 
+    color: beige;
+    width: 100%;
+}
+
+.button-row {
+    margin-bottom: 1em;
 }

@@ -1,6 +1,7 @@
-const Project = (title) => {
+const Project = (title, description) => {
     let toDos = [];
     const getTitle = () => title
+    const getDescription = () => description
 
     const getToDos = () => {
         return toDos
@@ -14,7 +15,7 @@ const Project = (title) => {
         toDos.splice(index, 1);
     }
 
-    return { getToDos, addToDo, removeToDo, getTitle }
+    return { getToDos, addToDo, removeToDo, getTitle, getDescription }
 
 }
 
