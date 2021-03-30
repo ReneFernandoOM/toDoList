@@ -23,7 +23,7 @@
             </div>
         </nav>
     </header>
-    <div class="container">
+    <div class="container" id="mainContainer">
         <div class="side-nav">
             <div class="main-item">
                 <span><i data-feather="inbox" class="side-nav-icons"></i></span>
@@ -54,7 +54,7 @@
                     <p class="proj-description">Descripción para el proyecto 1</p>
                 </div>
                 <div class="add-btn-container">
-                    <button class="button add-btn" id="addTasksBtn">Añadir tarea</button>
+                    <button class="button add-btn" id="addTasksBtn-999">Añadir tarea</button>
                 </div>
             </div>
             <div class="todos-container">
@@ -65,12 +65,12 @@
                             <div class="todo-name">ajshdfjah</div>
                         </div>
                         <div class="todo-right">
-                            <span id="todoEdit"><i data-feather="edit"></i></span>
-                            <span id="todoRemove"><i data-feather="x-square"></i></span>
+                            <span class="todo-edit"><i data-feather="edit"></i></span>
+                            <span class="todo-remove"><i data-feather="x-square"></i></span>
                             <span class="todo-info" id="1"><i data-feather="info"></i></span>
                         </div>
                     </div>
-                    <div class="todo-container" id="todo-1">
+                    <div class="todo-info-container" id="todoInfo-1">
                         <div class="todo-content">
                             <div class="todo-descrip">Lorem ipsum dolor sit amet consectetur adipisicing elit. Non
                                 placeat repellendus incidunt repudiandae numquam voluptatibus, consectetur nulla
@@ -91,12 +91,12 @@
                             <div class="todo-name">ajshdfjah</div>
                         </div>
                         <div class="todo-right">
-                            <span id="todoEdit"><i data-feather="edit"></i></span>
-                            <span id="todoRemove"><i data-feather="x-square"></i></span>
+                            <span class="todo-edit"><i data-feather="edit"></i></span>
+                            <span class="todo-remove"><i data-feather="x-square"></i></span>
                             <span class="todo-info" id="2"><i data-feather="info"></i></span>
                         </div>
                     </div>
-                    <div class="todo-container" id="todo-2">
+                    <div class="todo-info-container" id="todo-2">
                         <div class="todo-content">
                             <div class="todo-descrip">Lorem ipsum dolor sit amet consectetur adipisicing elit. Non
                                 placeat repellendus incidunt repudiandae numquam voluptatibus, consectetur nulla
@@ -134,9 +134,9 @@
     </div>
 
     <!-- MODAL ADD TASK-->
-    <div class="modal-bg" id="taskModal">
+    <div class="modal-bg" id="taskModal-999">
         <div class="modal">
-            <span class="modal-close" id="closeTaskModal">&times;</span>
+            <span class="modal-close" id="closeTaskModal-999">&times;</span>
             <div class="modal-header">
                 Añadir tarea
             </div>
@@ -159,7 +159,7 @@
                 </div>
             </div>
             <div class="button-row">
-                <button class="button submit-btn" id="addTask">Agregar tarea</button>
+                <button class="button submit-btn" id="addTask-999">Agregar tarea</button>
             </div>
         </div>
     </div>

@@ -4,6 +4,12 @@ const ToDo = (title, description, dueDate, priority) => {
         1: 'Normal',
         2: 'Alta'
     }
+
+    const getTitle = () => title;
+    const getDescription = () => description;
+    const getDueDate = () => dueDate;
+    const getPriority = () => priority;
+
     const setPriority = (priorityLevel) => {
         priority = _priorityLevels[priorityLevel];
     }
@@ -15,7 +21,10 @@ const ToDo = (title, description, dueDate, priority) => {
         setPriority(priority);
     })()
 
-    return { setPriority, getToDoInfo }
+    return {
+        setPriority, getToDoInfo, getTitle,
+        getDescription, getDueDate, getPriority
+    }
 }
 
 export { ToDo }

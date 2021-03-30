@@ -86,10 +86,12 @@ body {
     padding: 1em 3em;
     border: none;
     box-shadow: 0.35em 0.35em 0.35em rgb(0, 0, 0, 0.3);
+    transition: transform 0.2s ease-in;
 }
 
 .add-btn:hover {
     cursor: pointer;
+    transform: translateY(-0.25em);
 }
 
 .todos-container {
@@ -148,11 +150,11 @@ body {
     cursor: pointer;
 }
 
-#todoEdit:hover {
+.todo-edit:hover {
     color: rgb(174, 199, 253);
 }
 
-#todoRemove:hover {
+.todo-remove:hover {
     color: rgb(253, 150, 150);
 }
 
@@ -160,7 +162,7 @@ body {
     color: rgb(165, 252, 165);
 }
 
-.todo-container {
+.todo-info-container {
     max-height: 0em;
     overflow: hidden;
     transition: max-height 0.5s linear;
@@ -289,9 +291,6 @@ body {
     cursor: pointer;
 }
 
-#projDesc {
-    /* height: 7.5em; */
-}
 
 /* MODAL */
 .modal-bg {
