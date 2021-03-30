@@ -52,9 +52,9 @@ const mainContainerListeners = (() => {
 
         toDoInfos.forEach(toDoInfo => {
             toDoInfo.addEventListener('click', () => {
-                let todoId = toDoInfo.id.split('-')[1];
-                let toDoContainer = document.querySelector(`#todoInfo-${todoId}`);
-                console.log(`#todoInfo-${todoId}`);
+                let projId = toDoInfo.id.split('-')[1];
+                let todoId = toDoInfo.id.split('-')[2];
+                let toDoContainer = document.querySelector(`#todoInfo-${projId}-${todoId}`);
                 if (toDoContainer.style.maxHeight) {
                     toDoContainer.style.maxHeight = null;
                 } else {
@@ -273,7 +273,7 @@ const domManipulation = (() => {
             todoRemoveS.appendChild(todoRemoveI);
             todoInfoI.setAttribute('data-feather', 'info');
             todoInfoS.classList.add('todo-info');
-            todoInfoS.id = `todoInfoBtn-${tDIndex}`;
+            todoInfoS.id = `todoInfoBtn-${index}-${tDIndex}`;
             todoInfoS.appendChild(todoInfoI);
 
             todoRight.appendChild(todoEditS);
@@ -294,7 +294,7 @@ const domManipulation = (() => {
             let proyP = document.createElement('p');
 
             toDoInfoContainer.classList.add('todo-info-container');
-            toDoInfoContainer.id = `todoInfo-${index}`;
+            toDoInfoContainer.id = `todoInfo-${index}-${tDIndex}`;
 
             toDoContent.classList.add('todo-content');
             toDoDesc.classList.add('todo-descrip');
