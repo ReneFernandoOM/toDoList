@@ -18,7 +18,6 @@ const appLogic = (() => {
         let project = getProject(projectIndex);
         project.addToDo(newTodo);
         domManipulation.toDoRender(projectIndex);
-        console.log(`PROYECTO: ${projectIndex}`)
         // let projects[projectIndex].addToDo(newTodo);
     }
 
@@ -35,11 +34,10 @@ const appLogic = (() => {
 
 // appLogic.addProject('titulo 1', 'prubea 1');
 
-const mainContainerListeners = (() => {
+const toDoListeners = (() => {
 
-    const addListeners = () => {
+    const checkedListener = () => {
         const checkedDivs = document.querySelectorAll('.todo-checked');
-        const toDoInfos = document.querySelectorAll('.todo-info');
         checkedDivs.forEach(checkedDiv => {
             checkedDiv.addEventListener('click', () => {
                 if (checkedDiv.classList.contains('checked')) {
@@ -49,7 +47,10 @@ const mainContainerListeners = (() => {
                 }
             })
         });
+    }
 
+    const infoListener = () => {
+        const toDoInfos = document.querySelectorAll('.todo-info');
         toDoInfos.forEach(toDoInfo => {
             toDoInfo.addEventListener('click', () => {
                 let projId = toDoInfo.id.split('-')[1];
@@ -62,6 +63,38 @@ const mainContainerListeners = (() => {
                 }
             })
         });
+    }
+
+    const removeListener = () => {
+        const toDoRemoves = document.querySelectorAll('.todo-remove');
+        toDoRemoves.forEach(toDoRemove => {
+            toDoRemove.addEventListener('click', () => {
+                let projId = toDoRemove.id.split('-')[1];
+                let todoId = toDoRemove.id.split('-')[2];
+                let project = appLogic.getProject(projId);
+                project.removeToDo(todoId);
+                domManipulation.toDoRender(projId);
+            })
+        })
+    }
+
+    const editListener = () => {
+        const toDoEdits = document.querySelectorAll('.todo-edit');
+        toDoEdits.forEach(toDoEdit => {
+            toDoEdit.addEventListener('click', () => {
+                const projId = toDoEdit.id.split('-')[1];
+                const todoId = toDoEdit.id.split('-')[2];
+                const modalBg = document.querySelector(`#editTaskModal-${projId}-${todoId}`);
+                modalBg.classList.add('modal-active');
+            })
+        })
+    }
+
+    const addListeners = () => {
+        checkedListener();
+        infoListener();
+        removeListener();
+        editListener();
     }
 
     const _init = (() => {
@@ -200,7 +233,7 @@ const domManipulation = (() => {
         labelPrio.htmlFor = prioId;
         labelPrio.innerText = 'Prioridad:';
         selectPrio.id = prioId;
-        ['Baja', 'Media', 'Alta'].forEach((element, iPos) => {
+        ['Baja', 'Normal', 'Alta'].forEach((element, iPos) => {
             selectPrio.add(new Option(element, iPos))
         })
 
@@ -220,6 +253,105 @@ const domManipulation = (() => {
         buttonSubmit.classList.add('button', 'submit-btn');
         buttonSubmit.id = `addTask-${index}`;
         buttonSubmit.innerText = 'Agregar tarea';
+
+        buttonRow.appendChild(buttonSubmit);
+
+        modal.appendChild(buttonRow);
+        modalBg.appendChild(modal);
+
+        mainContainer.appendChild(modalBg);
+    }
+
+    const renderEditToDoModal = (projIndex, tdIndex) => {
+        const project = appLogic.getProject(projIndex);
+        const toDo = project.getToDo(tdIndex);
+        let mainContainer = document.querySelector('#mainContainer');
+        let modalBg = document.createElement('div');
+        let modal = document.createElement('div');
+        let closeModal = document.createElement('span');
+        let modalHeader = document.createElement('div');
+
+        modalBg.classList.add('modal-bg');
+        modalBg.id = `editTaskModal-${projIndex}-${tdIndex}`;
+        modal.classList.add('modal');
+        closeModal.classList.add('modal-close');
+        closeModal.id = `closeEditTaskModal-${projIndex}-${tdIndex}`;
+        closeModal.innerHTML = '&times;'
+        modalHeader.classList.add('modal-header');
+        modalHeader.innerText = 'Editar tarea';
+
+        modal.appendChild(closeModal);
+        modal.appendChild(modalHeader);
+
+        let modalContentContainer = document.createElement('div');
+
+        let modalContent = document.createElement('div');
+        let labelTaskName = document.createElement('label');
+        let inputTaskName = document.createElement('input');
+        let taskNameId = `editTaskName-${projIndex}-${tdIndex}`;
+        let labelTaskDesc = document.createElement('label');
+        let inputTaskDesc = document.createElement('textarea');
+        let taskDescId = `editTaskDesc-${projIndex}-${tdIndex}`;
+
+        modalContentContainer.classList.add('modal-content-container', 'pb-0');
+
+        modalContent.classList.add('modal-content', 'py-0');
+        labelTaskName.htmlFor = taskNameId;
+        labelTaskName.innerText = 'Nombre de la tarea';
+        inputTaskName.id = taskNameId;
+        inputTaskName.value = toDo.getTitle();
+        inputTaskName.type = 'text';
+        labelTaskDesc.htmlFor = taskDescId;
+        labelTaskDesc.innerText = 'Descripción de la tarea';
+        inputTaskDesc.id = taskDescId;
+        inputTaskDesc.value = toDo.getDescription();
+        inputTaskDesc.cols = '30';
+        inputTaskDesc.rows = '5';
+
+        modalContent.appendChild(labelTaskName);
+        modalContent.appendChild(inputTaskName);
+        modalContent.appendChild(labelTaskDesc);
+        modalContent.appendChild(inputTaskDesc);
+
+        modalContentContainer.appendChild(modalContent);
+
+        let modalTaskInfo = document.createElement('div');
+        let labelDueDate = document.createElement('label');
+        let inputDueDate = document.createElement('input');
+        let dueDateId = `editDueDate-${projIndex}-${tdIndex}`;
+        let labelPrio = document.createElement('label');
+        let selectPrio = document.createElement('select');
+        let prioId = `editPrioridad-${projIndex}-${tdIndex}`;
+        modalTaskInfo.classList.add('modal-task-info');
+
+        labelDueDate.htmlFor = dueDateId;
+        labelDueDate.innerText = 'Fecha de vencimiento';
+        inputDueDate.id = dueDateId;
+        inputDueDate.type = 'date';
+        inputDueDate.value = toDo.getDueDate();
+        labelPrio.htmlFor = prioId;
+        labelPrio.innerText = 'Prioridad:';
+        selectPrio.id = prioId;
+        ['Baja', 'Normal', 'Alta'].forEach((element, iPos) => {
+            selectPrio.add(new Option(element, iPos))
+        })
+        selectPrio.value = toDo.getPriorityLevel();
+        modalTaskInfo.appendChild(labelDueDate);
+        modalTaskInfo.appendChild(inputDueDate);
+        modalTaskInfo.appendChild(labelPrio);
+        modalTaskInfo.appendChild(selectPrio);
+
+        modalContentContainer.appendChild(modalTaskInfo);
+
+        modal.appendChild(modalContentContainer);
+
+        let buttonRow = document.createElement('div');
+        let buttonSubmit = document.createElement('button');
+
+        buttonRow.classList.add('button-row');
+        buttonSubmit.classList.add('button', 'submit-btn');
+        buttonSubmit.id = `editTask-${projIndex}-${tdIndex}`;
+        buttonSubmit.innerText = 'Editar tarea';
 
         buttonRow.appendChild(buttonSubmit);
 
@@ -267,9 +399,11 @@ const domManipulation = (() => {
             todoRight.classList.add('todo-right');
             todoEditI.setAttribute('data-feather', 'edit');
             todoEditS.classList.add('todo-edit');
+            todoEditS.id = `todoEditBtn-${index}-${tDIndex}`;
             todoEditS.appendChild(todoEditI);
             todoRemoveI.setAttribute('data-feather', 'x-square');
             todoRemoveS.classList.add('todo-remove');
+            todoRemoveS.id = `todoRmvBtn-${index}-${tDIndex}`;
             todoRemoveS.appendChild(todoRemoveI);
             todoInfoI.setAttribute('data-feather', 'info');
             todoInfoS.classList.add('todo-info');
@@ -317,10 +451,10 @@ const domManipulation = (() => {
             todoDiv.appendChild(toDoInfoContainer);
 
             toDosContainer.appendChild(todoDiv);
-
+            renderEditToDoModal(index, tDIndex);
         });
         mainContainer.appendChild(toDosContainer);
-        mainContainerListeners.addListeners();
+        toDoListeners.addListeners();
         feather.replace();
     }
 
@@ -411,6 +545,32 @@ const modalListeners = (() => {
         })
 
 
+    }
+
+    const editTaskModalListener = (projIndex, tdIndex) => {
+        let modalBg = document.querySelector(`#editTaskModal-${projIndex}-${tdIndex}`);
+        let modalBgClone = modalBg.cloneNode(true)
+        modalBg.parentNode.replaceChild(modalBgClone, modalBg);
+        modalBg = document.querySelector(`#editTaskModal-${projIndex}-${tdIndex}`);
+
+        modalBg = removeTaskModalListeners(modalBg, projIndex)
+        const modalInit = document.querySelector(`#todoEditBtn-0-0-${projIndex}-${tdIndex}`);
+        const closeModal = document.querySelector(`#closeTaskModal-${projIndex}-${tdIndex}`);
+        const taskName = document.querySelector(`#taskName-${projIndex}-${tdIndex}`);
+        const taskDesc = document.querySelector(`#taskDesc-${projIndex}-${tdIndex}`);
+        const taskDueDate = document.querySelector(`#dueDate-${projIndex}-${tdIndex}`);
+        const taskPrio = document.querySelector(`#prioridad-${projIndex}-${tdIndex}`);
+        const taskAddBtn = document.querySelector(`#addTask-${projIndex}-${tdIndex}`);
+
+
+
+        closeModal.addEventListener('click', () => {
+            modalBg.classList.remove('modal-active');
+        })
+
+        modalInit.addEventListener('click', () => {
+            modalBg.classList.add('modal-active');
+        })
     }
 
     const removeTaskModalListeners = (modalBg, index) => {

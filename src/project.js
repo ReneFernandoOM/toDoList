@@ -7,6 +7,10 @@ const Project = (title, description) => {
         return toDos
     }
 
+    const getToDo = (index) => {
+        return toDos[index]
+    }
+
     const addToDo = (toDo) => {
         toDos.push(toDo);
     }
@@ -15,7 +19,7 @@ const Project = (title, description) => {
         toDos.splice(index, 1);
     }
 
-    return { getToDos, addToDo, removeToDo, getTitle, getDescription }
+    return { getToDos, getToDo, addToDo, removeToDo, getTitle, getDescription }
 
 }
 
