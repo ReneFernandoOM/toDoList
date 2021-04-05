@@ -13,9 +13,13 @@ const ToDo = (title, description, dueDate, priority) => {
         return Object.keys(_priorityLevels).find(key => _priorityLevels[key] === priority)
     }
 
+    const setTitle = newTitle => title = newTitle;
+    const setDescription = newDesc => description = newDesc;
+    const setDueDate = newDueDate => dueDate = newDueDate;
     const setPriority = (priorityLevel) => {
         priority = _priorityLevels[priorityLevel];
     }
+
     const getToDoInfo = () => {
         console.log(title, description, dueDate, priority);
     }
@@ -25,9 +29,10 @@ const ToDo = (title, description, dueDate, priority) => {
     })()
 
     return {
-        setPriority, getToDoInfo, getTitle,
+        getPriorityLevel, getToDoInfo, getTitle,
         getDescription, getDueDate, getPriority,
-        getPriorityLevel
+        setPriority, setTitle, setDescription,
+        setDueDate
     }
 }
 

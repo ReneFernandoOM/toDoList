@@ -72,6 +72,8 @@ const toDoListeners = (() => {
                 let projId = toDoRemove.id.split('-')[1];
                 let todoId = toDoRemove.id.split('-')[2];
                 let project = appLogic.getProject(projId);
+                let editModal = document.querySelector(`#editTaskModal-${projId}-${todoId}`)
+                editModal.remove();
                 project.removeToDo(todoId);
                 domManipulation.toDoRender(projId);
             })
@@ -263,6 +265,9 @@ const domManipulation = (() => {
     }
 
     const renderEditToDoModal = (projIndex, tdIndex) => {
+        let existingModal = document.querySelector(`#editTaskModal-${projIndex}-${tdIndex}`)
+        if (existingModal) return;
+
         const project = appLogic.getProject(projIndex);
         const toDo = project.getToDo(tdIndex);
         let mainContainer = document.querySelector('#mainContainer');
@@ -271,7 +276,7 @@ const domManipulation = (() => {
         let closeModal = document.createElement('span');
         let modalHeader = document.createElement('div');
 
-        modalBg.classList.add('modal-bg');
+        modalBg.classList.add('modal-bg', 'edit-modal');
         modalBg.id = `editTaskModal-${projIndex}-${tdIndex}`;
         modal.classList.add('modal');
         closeModal.classList.add('modal-close');
@@ -359,16 +364,27 @@ const domManipulation = (() => {
         modalBg.appendChild(modal);
 
         mainContainer.appendChild(modalBg);
+        modalListeners.editTaskModalListener(projIndex, tdIndex);
+    }
+
+    const removeEditModals = () => {
+        const editModals = document.querySelectorAll('.edit-modal');
+        editModals.forEach(editModal => {
+            editModal.remove();
+        });
     }
 
     const toDoRender = (index) => {
+        removeEditModals();
         let project = appLogic.getProject(index);
 
         let toDos = project.getToDos();
 
         let mainContainer = document.querySelector('.main-container');
         let toDosContainer = document.querySelector('.todos-container');
-        toDosContainer.innerHTML = '';
+        if (toDosContainer) toDosContainer.remove();
+        toDosContainer = document.createElement('div');
+        toDosContainer.classList.add('todos-container');
         toDos.forEach((toDo, tDIndex) => {
             let todoDiv = document.createElement('div');
             let todoMainInfo = document.createElement('div');
@@ -437,7 +453,7 @@ const domManipulation = (() => {
             toDoAllInfo.classList.add('todo-all-info');
             fechaP.innerText = `Fecha: ${toDo.getDueDate()}`;
             prioP.innerText = `Prioridad: ${toDo.getPriority()}`;
-            proyP.innerText = `Proyecto ${project.getTitle()}`;
+            proyP.innerText = `Proyecto: ${project.getTitle()}`;
 
             toDoAllInfo.appendChild(fechaP);
             toDoAllInfo.appendChild(prioP);
@@ -548,29 +564,37 @@ const modalListeners = (() => {
     }
 
     const editTaskModalListener = (projIndex, tdIndex) => {
-        let modalBg = document.querySelector(`#editTaskModal-${projIndex}-${tdIndex}`);
-        let modalBgClone = modalBg.cloneNode(true)
-        modalBg.parentNode.replaceChild(modalBgClone, modalBg);
-        modalBg = document.querySelector(`#editTaskModal-${projIndex}-${tdIndex}`);
+        const modalBg = document.querySelector(`#editTaskModal-${projIndex}-${tdIndex}`);
+        const closeModal = document.querySelector(`#closeEditTaskModal-${projIndex}-${tdIndex}`);
+        const editTaskName = document.querySelector(`#editTaskName-${projIndex}-${tdIndex}`);
+        const editTaskDesc = document.querySelector(`#editTaskDesc-${projIndex}-${tdIndex}`);
+        const editTaskDueDate = document.querySelector(`#editDueDate-${projIndex}-${tdIndex}`);
+        const editTaskPrio = document.querySelector(`#editPrioridad-${projIndex}-${tdIndex}`);
+        const editTaskBtn = document.querySelector(`#editTask-${projIndex}-${tdIndex}`);
 
-        modalBg = removeTaskModalListeners(modalBg, projIndex)
-        const modalInit = document.querySelector(`#todoEditBtn-0-0-${projIndex}-${tdIndex}`);
-        const closeModal = document.querySelector(`#closeTaskModal-${projIndex}-${tdIndex}`);
-        const taskName = document.querySelector(`#taskName-${projIndex}-${tdIndex}`);
-        const taskDesc = document.querySelector(`#taskDesc-${projIndex}-${tdIndex}`);
-        const taskDueDate = document.querySelector(`#dueDate-${projIndex}-${tdIndex}`);
-        const taskPrio = document.querySelector(`#prioridad-${projIndex}-${tdIndex}`);
-        const taskAddBtn = document.querySelector(`#addTask-${projIndex}-${tdIndex}`);
-
-
+        let project = appLogic.getProject(projIndex);
+        let toDo = project.getToDo(tdIndex);
 
         closeModal.addEventListener('click', () => {
             modalBg.classList.remove('modal-active');
+            editTaskName.value = toDo.getTitle();
+            editTaskDesc.value = toDo.getDescription();
+            editTaskDueDate.value = toDo.getDueDate();
+            editTaskPrio.value = toDo.getPriorityLevel();
         })
 
-        modalInit.addEventListener('click', () => {
-            modalBg.classList.add('modal-active');
+        editTaskBtn.addEventListener('click', () => {
+            let toDoInfoContainer = document.querySelector(`#todoInfo-${projIndex}-${tdIndex}`);
+            toDoInfoContainer.parentNode.removeChild(toDoInfoContainer);
+            toDo.setTitle(editTaskName.value);
+            toDo.setDescription(editTaskDesc.value);
+            toDo.setDueDate(editTaskDueDate.value);
+            toDo.setPriority(editTaskPrio.value);
+            modalBg.classList.remove('modal-active');
+            modalBg.parentNode.removeChild(modalBg);
+            domManipulation.toDoRender(projIndex);
         })
+
     }
 
     const removeTaskModalListeners = (modalBg, index) => {
@@ -584,7 +608,7 @@ const modalListeners = (() => {
         projModalListeners();
         taskModalListener('999');
     })()
-    return { taskModalListener }
+    return { taskModalListener, editTaskModalListener }
 })()
 
 feather.replace();
