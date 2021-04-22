@@ -4,13 +4,58 @@ import { ToDo } from './toDo'
 const appLogic = (() => {
     let projects = [];
 
+    const saveProjects = () => {
+        let allData = {};
+        projects.forEach((project, index) => {
+            allData[index] = {};
+            allData[index]['title'] = project.getTitle()
+            allData[index]['description'] = project.getDescription()
+            allData[index]['todos'] = {};
+            let toDos = project.getToDos();
+            if (!toDos) return
+            toDos.forEach((toDo, tdIndex) => {
+                console.log(toDo, index)
+                allData[index]['todos'][tdIndex] = {};
+                allData[index]['todos'][tdIndex]['title'] = toDo.getTitle();
+                allData[index]['todos'][tdIndex]['description'] = toDo.getDescription();
+                allData[index]['todos'][tdIndex]['dueDate'] = toDo.getDueDate();
+                allData[index]['todos'][tdIndex]['priority'] = toDo.getPriorityLevel();
+            });
+        });
+        localStorage.setItem('projects', JSON.stringify(allData));
+    }
+
+    const loadProjects = () => {
+        let projectsStored = JSON.parse(localStorage.getItem('projects'));
+        for (let [projIndex, projInfo] of Object.entries(projectsStored)) {
+            let newProject = Project(projInfo['title'], projInfo['description'])
+
+            for (let [tdIndex, tdInfo] of Object.entries(projInfo['todos'])) {
+                let newTodo = ToDo(tdInfo['title'], tdInfo['description'], tdInfo['dueDate'], tdInfo['priority'])
+                newProject.addToDo(newTodo);
+            }
+            projects.push(newProject);
+            domManipulation.renderTaskModal(projIndex);
+            domManipulation.renderMainContainer(projIndex);
+            domManipulation.toDoRender(projIndex);
+        }
+        renderApp();
+    }
+
+    const renderApp = () => {
+        domManipulation.renderProjectsList();
+
+    }
+
     const getProjects = () => projects;
 
     const getProject = (index) => projects[index];
 
     const addProject = (title, description) => {
-        let projIndex = projects.push(Project(title, description)) - 1;
+        let newProject = Project(title, description)
+        let projIndex = projects.push(newProject) - 1;
         domManipulation.renderTaskModal(projIndex);
+        saveProjects();
     }
 
     const addToDoToProject = (projectIndex, toDoTitle, toDoDesc, toDoDueDate, toDoPrio) => {
@@ -18,6 +63,7 @@ const appLogic = (() => {
         let project = getProject(projectIndex);
         project.addToDo(newTodo);
         domManipulation.toDoRender(projectIndex);
+        saveProjects();
         // let projects[projectIndex].addToDo(newTodo);
     }
 
@@ -26,8 +72,26 @@ const appLogic = (() => {
         // TODO: ELIMINAR SU RESPECTIVO MODAL
     }
 
+    const getTodaYDate = () => {
+        let today = new Date();
+        let dd = today.getDate();
+        let mm = today.getMonth() + 1;
+        let yyyy = today.getFullYear();
+
+        if (dd < 10) {
+            dd = '0' + dd
+        }
+        if (mm < 10) {
+            mm = '0' + dd
+        }
+
+        return `${yyyy}-${mm}-${dd}`
+    }
+
     return {
-        getProjects, addProject, deleteProject, getProject, addToDoToProject
+        getProjects, addProject, saveProjects, loadProjects,
+        deleteProject, getProject, addToDoToProject,
+        getTodaYDate
     }
 
 })()
@@ -76,6 +140,7 @@ const toDoListeners = (() => {
                 editModal.remove();
                 project.removeToDo(todoId);
                 domManipulation.toDoRender(projId);
+                appLogic.saveProjects()
             })
         })
     }
@@ -222,6 +287,7 @@ const domManipulation = (() => {
         let modalTaskInfo = document.createElement('div');
         let labelDueDate = document.createElement('label');
         let inputDueDate = document.createElement('input');
+        let todayDate = appLogic.getTodaYDate();
         let dueDateId = `dueDate-${index}`;
         let labelPrio = document.createElement('label');
         let selectPrio = document.createElement('select');
@@ -232,6 +298,7 @@ const domManipulation = (() => {
         labelDueDate.innerText = 'Fecha de vencimiento';
         inputDueDate.id = dueDateId;
         inputDueDate.type = 'date';
+        inputDueDate.setAttribute('min', todayDate);
         labelPrio.htmlFor = prioId;
         labelPrio.innerText = 'Prioridad:';
         selectPrio.id = prioId;
@@ -323,6 +390,7 @@ const domManipulation = (() => {
         let modalTaskInfo = document.createElement('div');
         let labelDueDate = document.createElement('label');
         let inputDueDate = document.createElement('input');
+        let todayDate = appLogic.getTodaYDate();
         let dueDateId = `editDueDate-${projIndex}-${tdIndex}`;
         let labelPrio = document.createElement('label');
         let selectPrio = document.createElement('select');
@@ -334,6 +402,7 @@ const domManipulation = (() => {
         inputDueDate.id = dueDateId;
         inputDueDate.type = 'date';
         inputDueDate.value = toDo.getDueDate();
+        inputDueDate.setAttribute('min', todayDate)
         labelPrio.htmlFor = prioId;
         labelPrio.innerText = 'Prioridad:';
         selectPrio.id = prioId;
@@ -530,8 +599,9 @@ const modalListeners = (() => {
     const taskModalListener = (index) => {
         let modalBg = document.querySelector(`#taskModal-${index}`);
 
-
-        modalBg = removeTaskModalListeners(modalBg, index)
+        if (modalBg) {
+            modalBg = removeTaskModalListeners(modalBg, index)
+        }
         const modalInit = document.querySelector(`#addTasksBtn-${index}`);
         const closeModal = document.querySelector(`#closeTaskModal-${index}`);
         const taskName = document.querySelector(`#taskName-${index}`);
@@ -593,6 +663,7 @@ const modalListeners = (() => {
             modalBg.classList.remove('modal-active');
             modalBg.parentNode.removeChild(modalBg);
             domManipulation.toDoRender(projIndex);
+            appLogic.saveProjects();
         })
 
     }
@@ -606,10 +677,13 @@ const modalListeners = (() => {
 
     const init = (() => {
         projModalListeners();
-        taskModalListener('999');
     })()
     return { taskModalListener, editTaskModalListener }
 })()
+
+window.onload = () => {
+    appLogic.loadProjects();
+}
 
 feather.replace();
 

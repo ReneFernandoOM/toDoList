@@ -19,28 +19,16 @@
                 <h4>TODO LIST</h4>
             </div>
             <div class="account-info">
-                <h5>renefernandoortega@gmail.com</h5>
+                <!-- <h5>renefernandoortega@gmail.com</h5> -->
             </div>
         </nav>
     </header>
     <div class="container" id="mainContainer">
         <div class="side-nav">
-            <div class="main-item">
-                <span><i data-feather="inbox" class="side-nav-icons"></i></span>
-                <p class="side-nav-text">Inbox</p>
-            </div>
-            <div class="main-item">
-                <span><i data-feather="archive" class="side-nav-icons"></i></span>
-                <p class="side-nav-text">Today</p>
-            </div>
-            <div class="main-item">
-                <span><i data-feather="calendar" class="side-nav-icons"></i></span>
-                <p class="side-nav-text">Next Week</p>
-            </div>
+
             <div class="projects-list">
                 <h4>Proyectos</h4>
                 <ul id="projectsList">
-                    <li class="proj-list-item" id="projList-0">proj # 1</li>
                 </ul>
                 <span class="lista-proyecto" id="addProjectMod"><i data-feather="plus" class="side-nav-icons"></i>
                     Añadir
@@ -48,7 +36,7 @@
             </div>
         </div>
         <div class="main-container">
-            <div class="proj-info-container">
+            <!-- <div class="proj-info-container">
                 <div class="proj-info">
                     <h4 class="proj-title">Proyecto #1</h4>
                     <p class="proj-description">Descripción para el proyecto 1</p>
@@ -110,7 +98,7 @@
                         </div>
                     </div>
                 </div>
-            </div>
+            </div> -->
         </div>
     </div>
 
@@ -133,36 +121,6 @@
         </div>
     </div>
 
-    <!-- MODAL ADD TASK-->
-    <div class="modal-bg" id="taskModal-999">
-        <div class="modal">
-            <span class="modal-close" id="closeTaskModal-999">&times;</span>
-            <div class="modal-header">
-                Añadir tarea
-            </div>
-            <div class="modal-content-container pb-0">
-                <div class="modal-content py-0">
-                    <label for="bookName">Nombre de la tarea</label>
-                    <input type="text" id="taskName">
-                    <label for="bookName">Descripción de la tarea</label>
-                    <textarea type="text" id="taskDesc" cols="30" rows="5"></textarea>
-                </div>
-                <div class="modal-task-info">
-                    <label for="dueDate">Fecha de vencimiento</label>
-                    <input type="date" id="dueDate">
-                    <label for="prioridad">Prioridad:</label>
-                    <select name="" id="prioridad">
-                        <option value="">Baja</option>
-                        <option value="">Media</option>
-                        <option value="">Alta</option>
-                    </select>
-                </div>
-            </div>
-            <div class="button-row">
-                <button class="button submit-btn" id="addTask-999">Agregar tarea</button>
-            </div>
-        </div>
-    </div>
 
     <script src="main.js"></script>
 </body>

@@ -221,7 +221,6 @@ body {
 
 .projects-list {
     width: 100%;
-    margin-top: 2em;
     display: flex;
     justify-content: center;
     align-items: flex-start;
