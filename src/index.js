@@ -26,6 +26,7 @@ const appLogic = (() => {
     }
 
     const loadProjects = () => {
+        removePageContent();
         let projectsStored = JSON.parse(localStorage.getItem('projects'));
         for (let [projIndex, projInfo] of Object.entries(projectsStored)) {
             let newProject = Project(projInfo['title'], projInfo['description'])
@@ -36,15 +37,50 @@ const appLogic = (() => {
             }
             projects.push(newProject);
             domManipulation.renderTaskModal(projIndex);
+            domManipulation.renderDeleteProjectModal(projIndex);
             domManipulation.renderMainContainer(projIndex);
             domManipulation.toDoRender(projIndex);
         }
-        renderApp();
+        domManipulation.renderProjectsList();
     }
 
     const renderApp = () => {
-        domManipulation.renderProjectsList();
+        const projectsList = document.querySelector('#projectsList');
+        const mainContainer = document.querySelector('.main-container');
+        const modals = document.querySelectorAll('.modal-bg');
 
+        modals.forEach(modal => {
+            if (modal.id == 'projModal') return;
+
+            modal.parentElement.removeChild(modal);
+        })
+
+        projectsList.innerHTML = '';
+        mainContainer.innerHTML = '';
+
+        console.log(projects);
+
+        projects.forEach((project, projIndex) => {
+            domManipulation.renderTaskModal(projIndex);
+            domManipulation.renderDeleteProjectModal(projIndex);
+            domManipulation.renderMainContainer(projIndex);
+            domManipulation.toDoRender(projIndex);
+        })
+        domManipulation.renderProjectsList();
+    }
+
+    const deleteProject = (index) => {
+        projects.splice(index, 1);
+        renderApp();
+        saveProjects();
+    }
+
+    const removePageContent = () => {
+        const projectsList = document.querySelector('#projectsList');
+        const mainContainer = document.querySelector('.main-container');
+
+        projectsList.innerHTML = '';
+        mainContainer.innerHTML = '';
     }
 
     const getProjects = () => projects;
@@ -55,6 +91,7 @@ const appLogic = (() => {
         let newProject = Project(title, description)
         let projIndex = projects.push(newProject) - 1;
         domManipulation.renderTaskModal(projIndex);
+        domManipulation.renderDeleteProjectModal(projIndex);
         saveProjects();
     }
 
@@ -64,12 +101,6 @@ const appLogic = (() => {
         project.addToDo(newTodo);
         domManipulation.toDoRender(projectIndex);
         saveProjects();
-    }
-
-    const deleteProject = (index) => {
-        projects.splice(index, 1);
-        domManipulation.removeProjectChildren(index);
-
     }
 
     const getTodaYDate = () => {
@@ -96,7 +127,6 @@ const appLogic = (() => {
 
 })()
 
-// appLogic.addProject('titulo 1', 'prubea 1');
 
 const toDoListeners = (() => {
 
@@ -204,7 +234,7 @@ const domManipulation = (() => {
 
         removeProjIcon.setAttribute('data-feather', 'trash-2');
         removeProjSpan.classList.add('remove-proj');
-        removeProjIcon.id = `removeProjBtn-${index}`;
+        removeProjSpan.id = `removeProjBtn-${index}`;
         removeProjSpan.appendChild(removeProjIcon);
 
         projInfoContainer.classList.add('proj-info-container');
@@ -227,7 +257,7 @@ const domManipulation = (() => {
         let btn = document.createElement('button');
 
         btnContainer.classList.add('add-btn-container');
-        btn.classList.add('button', 'add-btn');
+        btn.classList.add('button', 'add-btn', 'submit-btn');
         btn.id = `addTasksBtn-${index}`
         btn.innerText = 'Añadir tarea';
 
@@ -243,6 +273,7 @@ const domManipulation = (() => {
 
         mainContainer.appendChild(toDosContainer);
         modalListeners.taskModalListener(index);
+        modalListeners.deleteProjectModalListener(index);
     }
 
     const renderTaskModal = (index) => {
@@ -336,6 +367,46 @@ const domManipulation = (() => {
         buttonRow.appendChild(buttonSubmit);
 
         modal.appendChild(buttonRow);
+        modalBg.appendChild(modal);
+
+        mainContainer.appendChild(modalBg);
+    }
+
+    const renderDeleteProjectModal = (index) => {
+        let mainContainer = document.querySelector('#mainContainer');
+        let modalBg = document.createElement('div');
+        let modal = document.createElement('div');
+        let closeModal = document.createElement('span');
+        let modalHeader = document.createElement('div');
+
+        modalBg.classList.add('modal-bg');
+        modalBg.id = `deleteProjectModal-${index}`;
+        modal.classList.add('modal');
+        closeModal.classList.add('modal-close');
+        closeModal.id = `closeDeleteProjectModal-${index}`;
+        closeModal.innerHTML = '&times;'
+        modalHeader.classList.add('modal-header');
+        modalHeader.innerText = 'Eliminar proyecto';
+
+        modal.appendChild(closeModal);
+        modal.appendChild(modalHeader);
+
+        let buttonRow = document.createElement('div');
+        let deleteProjBtn = document.createElement('button');
+        let cancelProjBtn = document.createElement('button');
+
+        buttonRow.classList.add('button-row');
+        deleteProjBtn.id = `deleteProjectBtn-${index}`;
+        deleteProjBtn.classList.add('button', 'submit-btn');
+        deleteProjBtn.textContent = 'Borrar proyecto';
+        cancelProjBtn.id = `cancelProjectBtn-${index}`;
+        cancelProjBtn.classList.add('button', 'cancel-btn');
+        cancelProjBtn.textContent = 'Cancelar';
+
+        buttonRow.appendChild(deleteProjBtn);
+        buttonRow.appendChild(cancelProjBtn);
+        modal.appendChild(buttonRow);
+
         modalBg.appendChild(modal);
 
         mainContainer.appendChild(modalBg);
@@ -449,11 +520,18 @@ const domManipulation = (() => {
     const removeProjectChildren = (projectIndex) => {
         let mainContainer = document.querySelector('.main-container');
         let addToDoModal = document.querySelector(`#taskModal-${projectIndex}`);
+        let deleteProjModal = document.querySelector(`#deleteProjectModal-${projectIndex}`);
         let sideNavProjectDiv = document.querySelector(`#projList-${projectIndex}`);
-
+        let editModals = document.querySelectorAll('.edit-modal');
         mainContainer.innerHTML = '';
         addToDoModal.parentElement.removeChild(addToDoModal);
+        deleteProjModal.parentElement.removeChild(deleteProjModal);
         sideNavProjectDiv.parentElement.removeChild(sideNavProjectDiv);
+
+        editModals.forEach(modal => {
+            let modalId = editModals[0].id.split('-')[1];
+            if (modalId === projectIndex) modal.parentElement.removeChild(modal)
+        })
     }
 
     const removeEditModals = () => {
@@ -567,7 +645,10 @@ const domManipulation = (() => {
         // addListeners();
     })()
 
-    return { renderProjectsList, renderMainContainer, renderTaskModal, toDoRender, removeProjectChildren }
+    return {
+        renderProjectsList, renderMainContainer, renderTaskModal,
+        toDoRender, removeProjectChildren, renderDeleteProjectModal
+    }
 })()
 
 const sideNavListeners = (() => {
@@ -653,6 +734,39 @@ const modalListeners = (() => {
 
     }
 
+    const deleteProjectModalListener = (index) => {
+        let modalBg = document.querySelector(`#deleteProjectModal-${index}`);
+
+        if (modalBg) {
+            modalBg = removeDelProjModalListeners(modalBg, index)
+        }
+
+        const modalInit = document.querySelector(`#removeProjBtn-${index}`);
+        const closeModal = document.querySelector(`#closeDeleteProjectModal-${index}`);
+        const cancelDeleteProjBtn = document.querySelector(`#cancelProjectBtn-${index}`)
+        const deleteProjectBtn = document.querySelector(`#deleteProjectBtn-${index}`);
+
+
+
+        closeModal.addEventListener('click', () => {
+            modalBg.classList.remove('modal-active');
+        })
+
+        cancelDeleteProjBtn.addEventListener('click', () => {
+            modalBg.classList.remove('modal-active');
+        })
+
+        modalInit.addEventListener('click', () => {
+            modalBg.classList.add('modal-active');
+        })
+
+        deleteProjectBtn.addEventListener('click', () => {
+            appLogic.deleteProject(index);
+        })
+
+
+    }
+
     const editTaskModalListener = (projIndex, tdIndex) => {
         const modalBg = document.querySelector(`#editTaskModal-${projIndex}-${tdIndex}`);
         const closeModal = document.querySelector(`#closeEditTaskModal-${projIndex}-${tdIndex}`);
@@ -695,10 +809,17 @@ const modalListeners = (() => {
         return document.querySelector(`#taskModal-${index}`);
     }
 
+    const removeDelProjModalListeners = (modalBg, index) => {
+        let modalBgClone = modalBg.cloneNode(true)
+        modalBg.parentNode.replaceChild(modalBgClone, modalBg);
+
+        return document.querySelector(`#deleteProjectModal-${index}`);
+    }
+
     const init = (() => {
         projModalListeners();
     })()
-    return { taskModalListener, editTaskModalListener }
+    return { taskModalListener, editTaskModalListener, deleteProjectModalListener }
 })()
 
 window.onload = () => {

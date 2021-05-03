@@ -75,6 +75,10 @@ body {
     align-items: flex-end;
 }
 
+.proj-info-title-container h4 {
+    margin-right: 1em;
+}
+
 .remove-proj {
     margin-bottom: 0px;
     display: flex;
@@ -95,10 +99,15 @@ body {
 
 .button {
     padding: 1em;
-    color: beige;
     border-radius: 0.5em;
     outline: none;
     font-size: 0.85em;
+    border-color: transparent;
+    box-shadow: 0.2em 0.2em 0.2em rgb(0, 0, 0, 0.3);
+}
+
+.button:hover {
+    cursor: pointer;
 }
 
 .add-btn {
@@ -297,17 +306,18 @@ body {
     margin-top: 1em;
 }
 
-.submit-btn {
-    padding: 1em;
-    background: #2d972d;
-    color: beige;
-    border-radius: 0.5em;
-    outline: none;
-    font-size: 0.85em;
+.button-row button {
+    margin: 0em 1.5em;
 }
 
-.submit-btn:hover {
-    cursor: pointer;
+.submit-btn {
+    background: #2d972d;
+    color: beige;
+}
+
+.cancel-btn {
+    background: rgb(161, 8, 8);
+    color: beige;
 }
 
 
