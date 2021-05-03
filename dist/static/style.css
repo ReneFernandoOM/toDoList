@@ -69,6 +69,26 @@ body {
     justify-content: space-between;
 }
 
+.proj-info-title-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+}
+
+.remove-proj {
+    margin-bottom: 0px;
+    display: flex;
+    /* align-items: flex-start; */
+}
+
+.remove-proj:hover {
+    cursor: pointer;
+}
+
+.proj-info-title-container span {
+    margin-bottom: 0px;
+}
+
 .add-btn-container {
     padding: 2em;
 }

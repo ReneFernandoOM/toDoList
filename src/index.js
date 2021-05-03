@@ -64,12 +64,12 @@ const appLogic = (() => {
         project.addToDo(newTodo);
         domManipulation.toDoRender(projectIndex);
         saveProjects();
-        // let projects[projectIndex].addToDo(newTodo);
     }
 
     const deleteProject = (index) => {
         projects.splice(index, 1);
-        // TODO: ELIMINAR SU RESPECTIVO MODAL
+        domManipulation.removeProjectChildren(index);
+
     }
 
     const getTodaYDate = () => {
@@ -191,15 +191,21 @@ const domManipulation = (() => {
         let mainContainer = document.querySelector('.main-container');
 
         let projInfoContainer = document.createElement('div');
+        let projMainInfoDiv = document.createElement('div');
         let projInfo = document.createElement('div');
-
+        let removeProjSpan = document.createElement('span');
+        let removeProjIcon = document.createElement('i')
         let projTitleH4 = document.createElement('h4');
         let projDescrP = document.createElement('p');
 
-        // mainContainer.innerHTML = '';
         while (mainContainer.lastElementChild) {
             mainContainer.removeChild(mainContainer.lastElementChild);
         }
+
+        removeProjIcon.setAttribute('data-feather', 'trash-2');
+        removeProjSpan.classList.add('remove-proj');
+        removeProjIcon.id = `removeProjBtn-${index}`;
+        removeProjSpan.appendChild(removeProjIcon);
 
         projInfoContainer.classList.add('proj-info-container');
         projInfo.classList.add('proj-info');
@@ -208,7 +214,11 @@ const domManipulation = (() => {
         projDescrP.classList.add('proj-description');
         projDescrP.innerText = project.getDescription();
 
-        projInfo.appendChild(projTitleH4);
+        projMainInfoDiv.classList.add('proj-info-title-container')
+        projMainInfoDiv.appendChild(projTitleH4);
+        projMainInfoDiv.appendChild(removeProjSpan)
+
+        projInfo.appendChild(projMainInfoDiv);
         projInfo.appendChild(projDescrP);
 
         projInfoContainer.appendChild(projInfo)
@@ -436,6 +446,16 @@ const domManipulation = (() => {
         modalListeners.editTaskModalListener(projIndex, tdIndex);
     }
 
+    const removeProjectChildren = (projectIndex) => {
+        let mainContainer = document.querySelector('.main-container');
+        let addToDoModal = document.querySelector(`#taskModal-${projectIndex}`);
+        let sideNavProjectDiv = document.querySelector(`#projList-${projectIndex}`);
+
+        mainContainer.innerHTML = '';
+        addToDoModal.parentElement.removeChild(addToDoModal);
+        sideNavProjectDiv.parentElement.removeChild(sideNavProjectDiv);
+    }
+
     const removeEditModals = () => {
         const editModals = document.querySelectorAll('.edit-modal');
         editModals.forEach(editModal => {
@@ -547,7 +567,7 @@ const domManipulation = (() => {
         // addListeners();
     })()
 
-    return { renderProjectsList, renderMainContainer, renderTaskModal, toDoRender }
+    return { renderProjectsList, renderMainContainer, renderTaskModal, toDoRender, removeProjectChildren }
 })()
 
 const sideNavListeners = (() => {
